@@ -39,6 +39,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <a href="borrar/<?=$habitacion->getId()?>" class="primary-btn">Cancelar</a>
                         </div>
                     </div>
                 </div>

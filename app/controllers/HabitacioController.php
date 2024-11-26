@@ -97,7 +97,6 @@ class HabitacioController
             FlashMessage::set('errores', [$fileException->getMessage()]);
         }
         App::get('router')->redirect('insertarHab');
-
     }
 
 

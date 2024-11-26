@@ -2,6 +2,7 @@
 
 use dwes\app\utils\Utils;
 ?>
+
 <nav class="mainmenu mobile-menu">
     <ul>
         <li class="active"><a href="./index.html">Home</a></li>
@@ -26,27 +27,11 @@ use dwes\app\utils\Utils;
     <a href="#"><i class="fa fa-tripadvisor"></i></a>
     <a href="#"><i class="fa fa-instagram"></i></a>
 </div>
-<ul class="top-widget">
-    <li><i class="fa fa-phone"></i> (12) 345 67890</li>
-    <li><i class="fa fa-envelope"></i> info.colorlib@gmail.com</li>
-</ul>
 </div>
 <!-- Offcanvas Menu Section End -->
 
 <!-- Header Section Begin -->
 <header class="header-section">
-    <div class="top-nav">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <ul class="tn-left">
-                        <li><i class="fa fa-phone"></i> (12) 345 67890</li>
-                        <li><i class="fa fa-envelope"></i> info.colorlib@gmail.com</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="menu-item">
         <div class="container">
             <div class="row">
@@ -66,15 +51,21 @@ use dwes\app\utils\Utils;
                                 else echo '<li>'; ?>
                                 <a href="/">Home</a></li>
 
-                                <?php if (Utils::esOpcionMenuActiva('/insertarHab') == true)
-                                    echo '<li class="active">';
-                                else echo '<li>'; ?>
-                                <a href="/insertarHab">Insertar Habitacón</a></li>
+                                <?php if (!is_null($app['user']) && 
+                                $app['user']->getRole() == 'ROLE_ADMIN') : ?>
 
-                                <?php if (Utils::esOpcionMenuActiva('/insertarEvent') == true)
-                                    echo '<li class="active">';
-                                else echo '<li>'; ?>
-                                <a href="/insertarEvent">Insertar Evento</a></li>
+                                    <?php if (Utils::esOpcionMenuActiva('/insertarHab') == true)
+                                        echo '<li class="active">';
+                                    else echo '<li>'; ?>
+                                    <a href="/insertarHab">Insertar Habitacón</a></li>
+
+                                    <?php if (Utils::esOpcionMenuActiva('/insertarEvent') == true)
+                                        echo '<li class="active">';
+                                    else echo '<li>'; ?>
+                                    <a href="/insertarEvent">Insertar Evento</a></li>
+
+                                <?php endif; ?>
+
 
                                 <?php if (Utils::esOpcionMenuActiva('/rooms') == true)
                                     echo '<li class="active">';
@@ -86,7 +77,7 @@ use dwes\app\utils\Utils;
                                 else echo '<li>'; ?>
                                 <a href="/event">Eventos</a></li>
 
-                                
+
 
 
                                 <?php if (is_null($app['user'])) : ?>

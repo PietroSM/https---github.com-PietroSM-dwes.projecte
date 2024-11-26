@@ -99,4 +99,11 @@ class PagesController{
         );
     }
 
+    public function borrar($id){
+        $habitacion = App::getRepository(HabitacioRepository::class)->find($id);
+        $habitacion->setIdClient(0);
+        App::getRepository(HabitacioRepository::class)->update($habitacion);
+        App::get('router')->redirect('reservas');
+
+    }
 }

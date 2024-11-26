@@ -37,10 +37,4 @@
         <i class="icon_menu"></i>
     </div>
     <div class="offcanvas-menu-wrapper">
-        <div class="canvas-close">
-            <i class="icon_close"></i>
-        </div>
-        <div class="search-icon  search-switch">
-            <i class="icon_search"></i>
-        </div>
         

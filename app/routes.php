@@ -16,3 +16,4 @@ $router->post('checkLogin', 'UsuariController@checkLogin');
 $router->get('logout', 'UsuariController@logout');
 $router->get('reservar/:id', 'HabitacioController@reservar', 'ROLE_USER');
 $router->get('reservas', 'PagesController@misReservas', 'ROLE_USER');
+$router->get('borrar/:id', 'PagesController@borrar', 'ROLE_USER');
