@@ -9,7 +9,7 @@
                 <form action="/guardarEvent" method="post" enctype="multipart/form-data" class="contact-form">
                     <div class="row">
                         <div class="col-lg-12">
-                            <input type="text" placeholder="Nombre" name="nombre">
+                            <input type="text" placeholder="Nombre" name="nombre" value="<?=$nombre?>">
                         </div>
                         <div class="col-lg-12">
                             <input type="date" placeholder="Fecha" name="fecha">

@@ -9,7 +9,7 @@
                 <form action="/checkRegistro" method="post" enctype="multipart/form-data" class="contact-form">
                     <div class="row">
                         <div class="col-lg-12">
-                            <input type="text" placeholder="Usuario" name="username">
+                            <input type="text" placeholder="Usuario" name="username" value="<?=$username?>">
                         </div>
                         <div class="col-lg-12">
                             <input type="password" placeholder="Password" name="password1">

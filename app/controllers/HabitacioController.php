@@ -6,6 +6,7 @@ use dwes\app\entity\Habitacio;
 use dwes\app\exceptions\AppException;
 use dwes\app\exceptions\FileException;
 use dwes\app\exceptions\QueryException;
+use dwes\app\exceptions\ValidationException;
 use dwes\app\repository\HabitacioRepository;
 use dwes\app\utils\File;
 use dwes\core\App;
@@ -14,16 +15,16 @@ use dwes\core\Response;
 
 class HabitacioController
 {
-
+    //✔
     public function index(){
-        $nombre = "";
-        $tamanyo = 0;
-        $capacidad = 0;
-        $localizacion = "";
-        $precio = 0;
-
         $mensaje = FlashMessage::get('mensaje');
         $errores = FlashMessage::get('errores', []);
+
+        $nombre = FlashMessage::get('nombre');
+        $tamanyo = FlashMessage::get('tamanyo');
+        $capacidad = FlashMessage::get('capacidad');
+        $localizacion = FlashMessage::get('localizacion');
+        $precio = FlashMessage::get('precio');
 
         try {
             $conexion = App::getConnection();
@@ -51,7 +52,8 @@ class HabitacioController
         );
     }
 
-
+    
+    //✔
     public function guardarHab(){
         try{
             $nombre = trim(htmlspecialchars($_POST['nombre']));
@@ -64,42 +66,53 @@ class HabitacioController
             FlashMessage::set('localizacion', $localizacion);
             $precio = trim(htmlspecialchars($_POST['precio']));
             FlashMessage::set('precio', $precio);
+
+            if(!empty($nombre) && !empty($tamanyo) && !empty($capacidad) &&
+                !empty($localizacion) && !empty($precio) ){
+                
+                if(is_numeric($tamanyo) && is_numeric($capacidad) && is_numeric($precio)){
+                    $tiposAceptados = ['image/jpeg', 'image/gif', 'image/png'];
+                    $imagen = new File('imagen', $tiposAceptados);
+            
+                    $imagen->saveUploadFile(Habitacio::RUTA_IMAGEN_HABITACION_SUBIDAS);
+            
+                    $habitacio = new Habitacio($nombre, $tamanyo, $capacidad, 
+                            $localizacion, $precio, $imagen->getFileName());
+        
+                    App::getRepository(HabitacioRepository::class)->guarda($habitacio);
+        
+                    $mensaje = "Se ha guardado una habitación: ". $habitacio->getNombre();
+                    FlashMessage::set('mensaje', $mensaje);
+        
+        
+                    FlashMessage::unset('nombre');
+                    FlashMessage::unset('tamanyo');
+                    FlashMessage::unset('capacidad');
+                    FlashMessage::unset('localizacion');
+                    FlashMessage::unset('precio');
+                }else{
+                    throw new ValidationException('Los campos tamanyo, capacidad y precio deben ser numericos');
+                }
+
+            }else{
+                throw new ValidationException('Deberes Rellenar todos los campos');
+            }
     
-            $tiposAceptados = ['image/jpeg', 'image/gif', 'image/png'];
-            $imagen = new File('imagen', $tiposAceptados);
-    
-            $imagen->saveUploadFile(Habitacio::RUTA_IMAGEN_HABITACION_SUBIDAS);
-    
-            $habitacio = new Habitacio($nombre, $tamanyo, $capacidad, 
-                    $localizacion, $precio, $imagen->getFileName());
-
-            $habitacioRepository = 
-                App::getRepository(HabitacioRepository::class)->guarda($habitacio);
-
-            $mensaje = "Se ha guardado una habitación: ". $habitacio->getNombre();
-            App::get('logger')->add($mensaje);
-
-            FlashMessage::set('mensaje', $mensaje);
-
-
-            FlashMessage::unset('nombre');
-            FlashMessage::unset('tamanyo');
-            FlashMessage::unset('capacidad');
-            FlashMessage::unset('localizacion');
-            FlashMessage::unset('precio');
-
-
         } catch (QueryException $queryException) {
             FlashMessage::set('errores', [$queryException->getMessage()]);
         } catch (AppException $appException) {
             FlashMessage::set('errores', [$appException->getMessage()]);
         } catch (FileException $fileException) {
             FlashMessage::set('errores', [$fileException->getMessage()]);
+        } catch (ValidationException $validationException) {
+            FlashMessage::set('errores', [$validationException->getMessage()]);
+            App::get('router')->redirect('insertarHab');
         }
         App::get('router')->redirect('insertarHab');
     }
 
 
+    //✔
     public function rooms(){
         try{
             $conexion = App::getConnection();
@@ -125,7 +138,7 @@ class HabitacioController
     }
 
 
-
+    //✔
     public function showRoom($id){
         try{
             $habitacio = App::getRepository(HabitacioRepository::class)->find($id);
@@ -148,11 +161,8 @@ class HabitacioController
             );
     }
 
-
-
-
+    //✔
     public function reservar($id){
-    //    echo $_SESSION['loguedUser'];
         $habitacio = App::getRepository(HabitacioRepository::class)->find($id);
         $habitacio->setIdClient($_SESSION['loguedUser']);
         App::getRepository(HabitacioRepository::class)->update($habitacio);

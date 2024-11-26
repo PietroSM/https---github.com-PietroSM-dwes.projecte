@@ -5,6 +5,7 @@ use dwes\app\entity\Event;
 use dwes\app\exceptions\AppException;
 use dwes\app\exceptions\FileException;
 use dwes\app\exceptions\QueryException;
+use dwes\app\exceptions\ValidationException;
 use dwes\app\repository\EventRepository;
 use dwes\app\utils\File;
 use dwes\core\App;
@@ -13,14 +14,14 @@ use dwes\core\Response;
 
 class EventController{
 
+    //✔
     public function index(){
-        $nombre = "";
-        $fecha = "";
-        $descripcion = "";
-        $localizacion = "";
-
         $mensaje = FlashMessage::get('mensaje');
         $errores = FlashMessage::get('errores', []);
+        $nombre = FlashMessage::get('nombre');
+        $fecha = FlashMessage::get('fecha');
+        $descripcion = FlashMessage::get('descripcion');
+        $localizacion = FlashMessage::get('localizacion');
 
         try {
             $conexion = App::getConnection();
@@ -47,11 +48,7 @@ class EventController{
         );
     }
 
-
-
-
-
-
+    //✔
     public function guardarEvent(){
         try{
             $nombre = trim(htmlspecialchars($_POST['nombre']));
@@ -63,20 +60,26 @@ class EventController{
             $localizacion = trim(htmlspecialchars($_POST['localizacion']));
             FlashMessage::set('localizacion', $localizacion);
 
-            $tiposAceptados = ['image/jpeg', 'image/gif', 'image/png'];
-            $imagen = new File('imagen', $tiposAceptados);
+            if(!empty($nombre) && !empty($fecha) && !empty($descripcion) &&
+                !empty($localizacion)){
 
-            $imagen->saveUploadFile(Event::RUTA_IMAGEN_EVENTO_SUBIDAS);
-
-            $event = new Event($nombre, $fecha, $descripcion, $imagen->getFileName(),
-                        $localizacion);
-            
-            $eventRepository = App::getRepository(EventRepository::class)->guarda($event);
+                    $tiposAceptados = ['image/jpeg', 'image/gif', 'image/png'];
+                    $imagen = new File('imagen', $tiposAceptados);
         
-            $mensaje = "Se ha guardado un evento: ". $event->getNombre();
-            App::get('logger')->add($mensaje);
+                    $imagen->saveUploadFile(Event::RUTA_IMAGEN_EVENTO_SUBIDAS);
+        
+                    $event = new Event($nombre, $fecha, $descripcion, $imagen->getFileName(),
+                                $localizacion);
+                    
+                    App::getRepository(EventRepository::class)->guarda($event);
+                
+                    $mensaje = "Se ha guardado un evento: ". $event->getNombre();
+                    FlashMessage::set('mensaje', $mensaje);
 
-            FlashMessage::set('mensaje', $mensaje);
+                }else{
+                    throw new ValidationException('Deberes Rellenar todos los campos');
+                }
+
 
         } catch (QueryException $queryException) {
             FlashMessage::set('errores', [$queryException->getMessage()]);
@@ -84,6 +87,9 @@ class EventController{
             FlashMessage::set('errores', [$appException->getMessage()]);
         } catch (FileException $fileException) {
             FlashMessage::set('errores', [$fileException->getMessage()]);
+        } catch (ValidationException $validationException) {
+            FlashMessage::set('errores', [$validationException->getMessage()]);
+            App::get('router')->redirect('insertarEvent');
         }
 
         App::get('router')->redirect('insertarEvent');
@@ -91,7 +97,7 @@ class EventController{
     }
 
 
-
+    //✔
     public function showEvents(){
 
         try{

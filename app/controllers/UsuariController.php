@@ -13,8 +13,8 @@ use dwes\core\Security;
 class UsuariController
 {
 
-    public function registro()
-    {
+    //✔
+    public function registro(){
 
         $errores = FlashMessage::get('registro-error', []);
         $mensaje = FlashMessage::get('mensaje');
@@ -32,18 +32,12 @@ class UsuariController
     }
 
 
-
-
-
-    public function checkRegistro()
-    {
-
+    //✔
+    public function checkRegistro(){
         try {
             if (isset($_POST['captcha']) && ($_POST['captcha'] != "")) {
                 if ($_SESSION['captchaGenerado'] != $_POST['captcha']) {
                     $mensaje = "¡Ha introducido un código de seguridad incorrecto! Inténtelo de nuevo.";
-                    $Nombre = "";
-                    $descripcion = "";
                     FlashMessage::set('mensaje', $mensaje);
                 } else {
 
@@ -66,7 +60,6 @@ class UsuariController
                 App::getRepository(UsuariRepository::class)->save($usuari);
                 FlashMessage::unset('username');
                 $mensaje = "Se ha creado el usuario: " . $usuari->getUsername();
-                App::get('logger')->add($mensaje);
                 FlashMessage::set('mensaje', $mensaje);
                 }
 
@@ -83,11 +76,9 @@ class UsuariController
 
     }
 
-
-
-
-    public function login()
-    {
+    
+     //✔
+    public function login(){
         $errores = FlashMessage::get('login-error', []);
         $username = FlashMessage::get('username');
 
@@ -98,9 +89,8 @@ class UsuariController
     }
 
 
-
-    public function checkLogin()
-    {
+    //✔
+    public function checkLogin(){
         try {
             if (!isset($_POST['usuario']) || empty($_POST['usuario']))
                 throw new ValidationException('Debes introducir el usuario y el password');
@@ -127,13 +117,12 @@ class UsuariController
         }
     }
 
-
-    public function logout()
-    {
+    //✔
+    public function logout(){
         if (isset($_SESSION['loguedUser'])) {
             $_SESSION['loguedUser'] = null;
             unset($_SESSION['loguedUser']);
         }
-        App::get('router')->redirect('login');
+        App::get('router')->redirect('');
     }
 }

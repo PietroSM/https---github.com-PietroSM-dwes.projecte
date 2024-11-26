@@ -15,6 +15,7 @@ use dwes\core\Response;
 
 class PagesController{
 
+    //✔
     public function index(){
         try{
 
@@ -45,14 +46,12 @@ class PagesController{
         );
     }
 
-
+    //✔
     public function habDisponibles(){
 
         try{
             $localizacion = trim(htmlspecialchars($_POST['localizacion']));
-            FlashMessage::set('localizacion', $localizacion);
             $persona = trim(htmlspecialchars($_POST['persona']));
-            FlashMessage::set('persona', $persona);
 
             $arrayFiltros = [
                 'localizacion' => strtolower($localizacion),
@@ -81,7 +80,7 @@ class PagesController{
     }
 
 
-
+    //✔
     public function misReservas(){
 
         $filtre = [
@@ -99,6 +98,7 @@ class PagesController{
         );
     }
 
+    //✔
     public function borrar($id){
         $habitacion = App::getRepository(HabitacioRepository::class)->find($id);
         $habitacion->setIdClient(0);
@@ -106,4 +106,6 @@ class PagesController{
         App::get('router')->redirect('reservas');
 
     }
+
+    
 }

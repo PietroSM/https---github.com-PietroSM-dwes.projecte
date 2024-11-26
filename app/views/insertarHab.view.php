@@ -9,19 +9,19 @@
                 <form action="/guardarHab" method="post" enctype="multipart/form-data" class="contact-form">
                     <div class="row">
                         <div class="col-lg-12">
-                            <input type="text" placeholder="nombre" name="nombre">
+                            <input type="text" placeholder="nombre" name="nombre" value="<?=$nombre?>">
                         </div>
                         <div class="col-lg-12">
-                            <input type="text" placeholder="tamanyo" name="tamanyo">
+                            <input type="text" placeholder="tamanyo" name="tamanyo" value="<?=$tamanyo?>">
                         </div>
                         <div class="col-lg-12">
-                            <input type="text" placeholder="capacidad" name="capacidad">
+                            <input type="text" placeholder="capacidad" name="capacidad" value="<?=$capacidad?>">
                         </div>
                         <div class="col-lg-12">
-                            <input type="text" placeholder="localización" name="localizacion">
+                            <input type="text" placeholder="localización" name="localizacion" value="<?=$localizacion?>">
                         </div>
                         <div class="col-lg-12">
-                            <input type="text" placeholder="precio" name="precio">
+                            <input type="text" placeholder="precio" name="precio" value="<?=$precio?>">
                         </div>
                         <div class="col-lg-12">
                             <input class="form-control-file" type="file" name="imagen">
