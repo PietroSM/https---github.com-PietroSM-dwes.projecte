@@ -74,6 +74,7 @@ class EventController{
                     App::getRepository(EventRepository::class)->guarda($event);
                 
                     $mensaje = "Se ha guardado un evento: ". $event->getNombre();
+                    App::get('logger')->add($mensaje);
                     FlashMessage::set('mensaje', $mensaje);
 
                 }else{

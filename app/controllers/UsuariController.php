@@ -60,6 +60,7 @@ class UsuariController
                 App::getRepository(UsuariRepository::class)->save($usuari);
                 FlashMessage::unset('username');
                 $mensaje = "Se ha creado el usuario: " . $usuari->getUsername();
+                App::get('logger')->add($mensaje);
                 FlashMessage::set('mensaje', $mensaje);
                 }
 

@@ -82,6 +82,7 @@ class HabitacioController
                     App::getRepository(HabitacioRepository::class)->guarda($habitacio);
         
                     $mensaje = "Se ha guardado una habitación: ". $habitacio->getNombre();
+                    App::get('logger')->add($mensaje);
                     FlashMessage::set('mensaje', $mensaje);
         
         
